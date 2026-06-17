@@ -137,8 +137,8 @@ let languages: [Language] = [
 
     Language(
         .french,
-        siteName: "Documentation de Vapor",
-        description: "Documentation de Vapor (framework web pour Swift).",
+        siteName: "Documentation du framework Vapor",
+        description: "Documentation du framework Vapor (développez en Swift pour le web).",
         navTranslations: [
             "Advanced": "Avancé",
             "Async": "Asynchrone",
@@ -155,7 +155,7 @@ let languages: [Language] = [
             "Environment": "Environement",
             "Files": "Fichiers",
             "Folder Structure": "Structure du Dossier",
-            "Getting Started": "Commencer",
+            "Getting Started": "Premiers pas",
             "Hello, world": "Bonjour, monde",
             "Install": "Installer",
             "Migrations": "Migrations",
