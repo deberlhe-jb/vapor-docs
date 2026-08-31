@@ -1,12 +1,12 @@
 # Fluent ORM
 
-Fluent est un framework [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) pour le langage Swift. Il tire parti du système fortement typé de Swift pour exposer une interface intuitive vers votre base de données. La philosophie de Fluent est axée sur la création de types modèles qui représentent la structure des données de votre base de données. Ces modèles sont ensuite utilisés pour exécuter des opérations de création, lecture, mise à jour et suppression plutôt que d'écrire des requêtes brutes.
+Fluent est un [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) pour le langage Swift. Il tire parti du système fortement typé de Swift pour exposer une interface intuitive vers votre base de données. La philosophie de Fluent est axée sur la création de types modèles qui représentent la structure des données de votre base de données. Ces modèles sont ensuite utilisés pour exécuter des opérations de création, lecture, mise à jour et suppression plutôt que d'écrire des requêtes brutes.
 
 ## Configuration
 
 ### Nouveau projet
 
-Lorsque vous créez un projet avec la commande `vapor new` (sans -n), répondez "yes" pour l'inclusion de Fluent et choisissez le driver de base de données que vous souhaitez utiliser. Cela installera les dépendances nécessaires pour votre projet, et ajoutera un exemple de code de configuration.
+Lorsque vous créez un projet avec la commande `vapor new` (sans `-n`), répondez "yes" pour l'inclusion de Fluent et choisissez le driver de base de données que vous souhaitez utiliser. Cela installera les dépendances nécessaires pour votre projet, et ajoutera un exemple de code de configuration.
 
 ### Projet existant
 
@@ -121,12 +121,12 @@ try app.autoMigrate().wait()
 try await app.autoMigrate()
 ```
 
-!!! Info
+!!! info "Info"
     La configuration SQLite active automatiquement les contraintes sur les clés étrangères pour chaque connexion établie, mais ne modifie pas les configurations de clés étrangères dans la base de données elle-même. Si vous effacez des lignes directement dans la base de données, vous pourriez enfreindre des contraintes ou triggers.
 
 #### MySQL
 
-MySQL est une base de données SQL open source populaire. De nombreux hébergeurs cloud la propose. Ce driver est aussi compatible avec MariaDB.
+MySQL est une base de données SQL open source populaire. De nombreux hébergeurs cloud la proposent. Ce driver est aussi compatible avec MariaDB.
 
 Pour utiliser MySQL, ajoutez ces dépendances à votre package.
 
@@ -168,14 +168,14 @@ app.databases.use(.mysql(
 ), as: .mysql)
 ```
 
-!!! Attention
+!!! warning "Attention"
     Ne désactivez pas la vérification de certificat en production. Vous devriez fournir un certificat à `TLSConfiguration` afin qu'il puisse effectuer les vérifications nécessaires. 
 
 #### MongoDB
 
 MongoDB est une base de données NoSQL populaire conçue pour les développeurs. Le driver est compatible avec tous les hébergeurs cloud et installations auto-hébergées à partir de la version 3.4.
 
-!!! Note
+!!! note "Note"
     Ce driver s'appuie sur un client MongoDB créé et maintenu par la communauté, [MongoKitten](https://github.com/OpenKitten/MongoKitten). MongoDB maintient un client officiel, [mongo-swift-driver](https://github.com/mongodb/mongo-swift-driver), ainsi qu'une intégration Vapor, [mongodb-vapor](https://github.com/mongodb/mongodb-vapor).
 
 Pour utiliser MongoDB, ajoutez ces dépendance à votre package.
@@ -188,7 +188,7 @@ Pour utiliser MongoDB, ajoutez ces dépendance à votre package.
 .product(name: "FluentMongoDriver", package: "fluent-mongo-driver")
 ```
 
-Ensuite, configurez la connection via Fluent avec `app.databases.use` dans `configure.swift`.
+Ensuite, configurez la connexion via Fluent avec `app.databases.use` dans `configure.swift`.
 
 Utilisez le format chaîne de connexion standard de MongoDB [documenté ici](https://www.mongodb.com/docs/manual/reference/connection-string/).
 
@@ -229,7 +229,7 @@ final class Galaxy: Model {
 
 Pour créer un nouveau modèle, créez une nouvelle classe qui se conforme à `Model`.
 
-!!! Conseil
+!!! tip "Conseil"
     Il est recommandé d'utiliser `final` pour vos classes de modèles, afin d'augmenter les performances et faciliter la conformité aux exigences du protocole.
 
 La première exigence du protocole `Model` est la chaîne statique `schema`.
@@ -295,7 +295,7 @@ struct CreateGalaxy: AsyncMigration {
             .create()
     }
 
-    // L'opération inverse est facultative, mais permet d'annuler les changements déclarés dans la méthode prepare.
+    // L'opération inverse est facultative, mais permet d'annuler les changements déclarés dans la méthode 'prepare'.
     func revert(on database: Database) async throws {
         try await database.schema("galaxies").delete()
     }
@@ -306,7 +306,7 @@ La méthode `prepare` permet de préparer la base de données à stoquer le mod�
 
 ### Schéma
 
-Dans cette méthode, `database.schema(_:)` est utilisé pour créer un `SchemaBuilder`. Un ou plusieurs champs sont ensuite ajoutés grâce à  `field` avant l'appel à `create()`, qui va créer le schéma défini.
+Dans cette méthode, `database.schema(_:)` est utilisé pour créer un `SchemaBuilder`. Un ou plusieurs champs sont ensuite ajoutés grâce à `field` avant l'appel à `create()`, qui va créer le schéma défini.
 
 Chaque champ ajouté au builder possède un nom, un type, et des contraintes facultatives.
 
@@ -316,7 +316,7 @@ field(<name>, <type>, <optional constraints>)
 
 La méthode `id()` ajoute le champ correspondant à la propriété annotée de `@ID` en utilisant les valeurs par défaut recommandées par Fluent.
 
-Inverser la migration annulera les changements effectués par la méthode prepare. Dans ce cas, cela effacera le schéma galaxies.
+Inverser la migration annulera les changements effectués par la méthode `prepare`. Dans ce cas, cela effacera le schéma galaxies.
 
 Une fois la migration définie, vous devez en informer Fluent en l'ajoutant à `app.migrations` dans `configure.swift`.
 
@@ -361,14 +361,13 @@ final class Galaxy: Model, Content {
 }
 ```
 
-`Galaxy.query` sert à créer un objet QueryBuilder (contructeur de requête) pour le modèle. `req.db` est une référence vers la base de données par défaut de votre application. Enfin, `all()` retourne tous les modèles stoqués dans votre base de données.
+`Galaxy.query` sert à créer un objet `QueryBuilder` (contructeur de requête) pour le modèle. `req.db` est une référence vers la base de données par défaut de votre application. Enfin, `all()` retourne tous les modèles stoqués dans votre base de données.
 
 Si vous compilez et lancez votre projet, et faites une requête HTTP `GET /galaxies`, vous devriez obtenir un tableau vide. Ajoutons une route pour créer une galaxie.
 
 ### Créer
 
-
-Si l'on suit la convention RESTful, nous allons créer un endpoint `POST /galaxies` pour créer une nouvelle galaxie. Puisque les modèles sont codables, vous pouvez décoder une galaxie directement à partir du corps de la requête HTTP.
+Si l'on suit la convention RESTful, nous allons créer un endpoint `POST /galaxies` pour créer une nouvelle galaxie. Puisque les modèles sont conformes à `Codable`, vous pouvez décoder une galaxie directement à partir du corps de la requête HTTP.
 
 ```swift
 app.post("galaxies") { req -> EventLoopFuture<Galaxy> in
@@ -378,8 +377,8 @@ app.post("galaxies") { req -> EventLoopFuture<Galaxy> in
 }
 ```
 
-!!! Référence utile
-    Voir [Décoder et encoder du contenu &rarr; Vue d'ensemble](../basics/content.md) pour plus d'informations sur le décodage des corps de requêtes.
+!!! seealso "Référence utile"
+    Voir [Les bases &rarr; Encodage/Décodage](../basics/content.md) pour plus d'informations sur le décodage des corps de requêtes.
 
 Une fois que vous avez une instance de votre modèle, appeler `create(on:)` l'enregistrera dans la base de données. Cela retourne un `EventLoopFuture<Void>` qui signale la fin de l'enregistrement. Une fois enregistré, retournez-le avec `map`.
 
@@ -415,7 +414,6 @@ Vous devriez obtenir pour réponse votre modèle nouvellement créé avec un ide
 ```
 
 Si maintenant vous appelez à nouveau `GET /galaxies`, vous devriez voir la galaxie créée qui vous est retournée dans un tableau.
-
 
 ## Relations
 
@@ -459,21 +457,20 @@ Le nouveau modèle `Star` est très similaire à `Galaxy` à l'exception d'un no
 var galaxy: Galaxy
 ```
 
-Une propriéré @Parent est un champ qui stoque l'identifiant d'un autre modèle. Le modèle qui définit la référence est appelé "enfant", et le modèle référencé est appelé "parent". Ce type de relation s'appelle notoirement "one-to-many". Le paramètre `key` définit le nom de la colonne à utiliser pour stoquer la clé du parent dans la table de l'enfant.
+Une propriété `@Parent` est un champ qui stoque l'identifiant d'un autre modèle. Le modèle qui définit la référence est appelé "enfant", et le modèle référencé est appelé "parent". Ce type de relation s'appelle notoirement "one-to-many". Le paramètre `key` définit le nom de la colonne à utiliser pour stoquer la clé du parent dans la table de l'enfant.
 
-Dans la méthode init, l'identifiant du parent est défini via `$galaxy`.
+Dans la méthode `init`, l'identifiant du parent est défini via `$galaxy`.
 
 ```swift
 self.$galaxy.id = galaxyID
 ```
 
-En mettant le préfixe `$` sur la propriété référençant le parent, vous avez accès à l'objet PropertyWrapper associé. Cette syntaxe est nécessaire pour accéder à l'objet `@Field` interne qui stoque la valeur réelle de l'identifiant.
+En mettant le préfixe `$` sur la propriété référençant le parent, vous avez accès à l'objet `PropertyWrapper` associé. Cette syntaxe est nécessaire pour accéder à l'objet `@Field` interne qui stoque la valeur réelle de l'identifiant.
 
-!!! A voir également
-    Cette proposition sur l'évolution du langage Swift concernant les PropertyWrappers les explique plus en détail : [[SE-0258] Property Wrappers](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0258-property-wrappers.md)
+!!! seealso "A voir également"
+    Cette proposition sur l'évolution du langage Swift concernant les `PropertyWrappers` les explique plus en détail : [[SE-0258] Property Wrappers](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0258-property-wrappers.md)
 
 Ensuite, créez une migration pour préparer la base de données à accueillir vos objets `Star`.
-
 
 ```swift
 struct CreateStar: AsyncMigration {
@@ -557,11 +554,11 @@ Voyons maintenant comment utiliser le chargement anticipé (eager-loading) que p
 var stars: [Star]
 ```
 
-L'objet PropertyWrapper `@Children` est l'opposé de `@Parent`. Il prend en paramètre `for` un key-path vers la propriété `@Parent` définie dans l'enfant. Sa valeur est un tableau d'objets enfants puisqu'il peut y avoir zéro ou plusieurs étoiles dans une galaxie. Aucun changement n'est requis dans la migration des galaxies puisque l'information nécessaire à cette relation est stoquée dans le modèle `Star`.
+L'objet `PropertyWrapper` `@Children` est l'opposé de `@Parent`. Il prend en paramètre `for` un `key-path` vers la propriété `@Parent` définie dans l'enfant. Sa valeur est un tableau d'objets enfants puisqu'il peut y avoir zéro ou plusieurs étoiles dans une galaxie. Aucun changement n'est requis dans la migration des galaxies puisque l'information nécessaire à cette relation est stoquée dans le modèle `Star`.
 
 ### Chargement anticipé
 
-Une fois la relation définie, vous pouvez utiliser la méthode `with` du QueryBuilder pour récupérer et sérialiser automatiquement la relation galaxie-étoile.
+Une fois la relation définie, vous pouvez utiliser la méthode `with` du `QueryBuilder` pour récupérer et sérialiser automatiquement la relation galaxie-étoile.
 
 ```swift
 app.get("galaxies") { req in
@@ -569,7 +566,7 @@ app.get("galaxies") { req in
 }
 ```
 
-Un key-path vers la relation `@Children` est passé à la méthode `with` pour indiquer à Fluent qu'il doit automatiquement inclure cette relation dans tout les résultats. Compilez et exécutez à nouveau votre application, puis faites une autre requête à `GET /galaxies`. Vous devriez désormais voir les étoiles inclues dans la réponse.
+Un `key-path` vers la relation `@Children` est passé à la méthode `with` pour indiquer à Fluent qu'il doit automatiquement inclure cette relation dans tout les résultats. Compilez et exécutez à nouveau votre application, puis faites une autre requête à `GET /galaxies`. Vous devriez désormais voir les étoiles incluses dans la réponse.
 
 ```json
 [
@@ -599,7 +596,7 @@ Pour configurer le niveau de log que votre application émettra, dans **configur
 app.logger.logLevel = .debug
 ```
 
-Cela indique que l'application émettre tout log défini avec le niveau debug ou supérieur. Lorsque vous compilerez et exécuterez votre application, les déclarations SQL générées par Fluent seront affichées sur la console.
+Cela indique que l'application émettra tout log défini avec le niveau debug ou supérieur. Lorsque vous compilerez et exécuterez votre application, les déclarations SQL générées par Fluent seront affichées sur la console.
 
 ## Pour aller plus loin
 

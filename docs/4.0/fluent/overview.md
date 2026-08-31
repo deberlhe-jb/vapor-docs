@@ -365,7 +365,6 @@ If you compile and run the project and request `GET /galaxies`, you should see a
 
 ### Create
 
-
 Following RESTful convention, use the `POST /galaxies` endpoint for creating a new galaxy. Since models are codable, you can decode a galaxy directly from the request body.
 
 ```swift
@@ -377,7 +376,7 @@ app.post("galaxies") { req -> EventLoopFuture<Galaxy> in
 ```
 
 !!! seealso
-    See [Content &rarr; Overview](../basics/content.md) for more information about decoding request bodies.
+    See [Basic &rarr; Content](../basics/content.md) for more information about decoding request bodies.
 
 Once you have an instance of the model, calling `create(on:)` saves the model to the database. This returns an `EventLoopFuture<Void>` which signals that the save has completed. Once the save completes, return the newly created model using `map`.
 
