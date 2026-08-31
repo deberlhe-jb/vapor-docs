@@ -11,7 +11,7 @@ let planets = try await Planet.query(on: database)
     .all()
 ```
 
-Les QueryBuilders sont liés à un type de modèle unique, et peuvent être instanciés par la méthode statique [`query`](model.md#query). Ils peuvent aussi être instanciés en passant le type de votre modèle à la méthode `query` d'un objet Database.
+Les QueryBuilders sont liés à un type de modèle unique, et peuvent être instanciés par la méthode statique [`query`](model.md#requêtes). Ils peuvent aussi être instanciés en passant le type de votre modèle à la méthode `query` d'un objet Database.
 
 ```swift
 // Crée aussi un QueryBuilder.
