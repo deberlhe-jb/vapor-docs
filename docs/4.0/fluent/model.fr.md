@@ -1,6 +1,6 @@
 # Modèles
 
-Les modèles représentent les données stoquées dans les tables ou collections de votre base de données. Ils comportent un ou plusiseurs champs capables de stoquer des valeurs codables. Chaque modèle a un identifiant unique. Des PropertyWrappers sont utilisés pour marquer les identifiants, champs, et relations. 
+Les modèles représentent les données stoquées dans les tables ou collections de votre base de données. Ils comportent un ou plusiseurs champs capables de stoquer des valeurs codables. Chaque modèle a un identifiant unique. Des `PropertyWrappers` sont utilisés pour marquer les identifiants, champs, et relations. 
 
 L'exemple ci-dessous représente un modèle simple avec un champ unique. Notez qu'un modèle ne représente pas en totalité un schéma en base de données, comme les contraintes, index, ou clés étrangères. Les schémas sont définis par des [migrations](migration.md). Les modèles ont le rôle spécifique de représenter les données stoquées par le schéma de votre base de données.  
 
@@ -41,12 +41,12 @@ final class Planet: Model {
 
 Lorsque vous requêterez ce modèle, les données seront récupérées depuis et enregistrées dans le schéma nommé `"planets"`.
 
-!!! Info
+!!! info "Info"
     Le nom du schéma est généralement le nom de la classe au pluriel et en minuscules. 
 
 ## Identifiant
 
-Chaque modèle a besoin d'une propriété `id` complétée du PropertyWrapper `@ID`. Ce champ identifie de façon unique les instances de votre modèle.
+Chaque modèle a besoin d'une propriété `id` complétée du `PropertyWrapper` `@ID`. Ce champ identifie de façon unique les instances de votre modèle.
 
 ```swift
 final class Planet: Model {
@@ -68,7 +68,7 @@ let id = try planet.requireID()
 
 ### Existance
 
-`@ID` possède une propriété `exists` qui représente l'état d'existence du modèle en base de données. Lorsque vous initialisez un nouveau modèle, sa valeur est définie à `false`. Une fois que vous enregistrez un modèle, ou lorsque vous en récupérez depuis une base de données, sa valeur est à `true`. Cette propriété est accessible en lecture/écriture.
+`@ID` possède une propriété `exists` qui représente l'état d'existence du modèle en base de données. Lorsque vous initialisez un nouveau modèle, sa valeur est définie à `false`. Une fois que vous enregistrez un modèle, ou lorsque vous en récupérez depuis une base de données, sa valeur passe à `true`. Cette propriété est accessible en lecture/écriture.
 
 ```swift
 if planet.$id.exists {
@@ -78,7 +78,7 @@ if planet.$id.exists {
 
 ### Identifiant personnalisé
 
-Fluent supporte des clés et types d'identifiant personnalisé avec la surcharge `@ID(custom:)`. 
+Fluent supporte des clés et types d'identifiants personnalisés avec la surcharge `@ID(custom:)`. 
 
 ```swift
 final class Planet: Model {
@@ -98,11 +98,11 @@ Des `@ID`s personnalisés vous permettent de spécifier comment les identifiants
 
 Le paramètre `generatedBy` peut accepter les valeurs suivantes :
 
-|Valeur|Description|
-|-|-|
-|`.user`|`@ID` doit se voir affecter une valeur avant d'enregistrer le modèle en base.|
-|`.random`|Le type sur lequel `@ID` est positionné doit être conforme à `RandomGeneratable`.|
-|`.database`|La responsabilité de génération de l'identifiant est déléguée à la base de données au moment de l'insertion.|
+| Valeur      | Description                                                                                                  |
+|-------------|--------------------------------------------------------------------------------------------------------------|
+| `.user`     | `@ID` doit se voir affecter une valeur avant d'enregistrer le modèle en base.                                |
+| `.random`   | Le type sur lequel `@ID` est positionné doit être conforme à `RandomGeneratable`.                            |
+| `.database` | La responsabilité de génération de l'identifiant est déléguée à la base de données au moment de l'insertion. |
 
 Si le paramètre `generatedBy` est omis, Fluent essaiera de déduire un comportement approprié selon le type de valeur démarqué par `@ID`. Par exemple, `Int` se verra attribué la stratégie `.database` par défaut.
 
@@ -117,9 +117,9 @@ final class Planet: Model {
 }
 ```
 
-Fluent a besoin de cet méthode pour son fonctionnement interne afin d'initialiser les modèles retournés par les requêtes. Cette méthode est également utilisée dans les processus de réflexion. 
+Fluent a besoin de cette méthode pour son fonctionnement interne afin d'initialiser les modèles retournés par les requêtes. Cette méthode est également utilisée dans les processus de réflexion. 
 
-Vous souhaiterez peut-être ajouter votre initialisateur personnalisé pour vous simplifier la vie. 
+Vous aurez probablement besoin d'ajouter votre initialisateur personnalisé pour vous simplifier la vie. 
 
 ```swift
 final class Planet: Model {
@@ -147,10 +147,10 @@ final class Planet: Model {
 
 Les champs ont besoin que le nom de la colonne en base de données soit défini de façon explicite. Il n'est pas obligatoire que le nom de colonne corresponde au nom de propriété du modèle. 
 
-!!! Conseil
+!!! tip "Conseil"
     Fluent recommande la convention `snake_case` pour les clés en base de données, et `camelCase` pour les noms de propriétés. 
 
-Les valeurs de champs peuvent être de tout type qui se conforme à `Codable`. Le stoquage de structures imbriquées et de tableaux dans des champs `@Field` est possible, mais les opérations de filtrage sont limitées. Se référer à [`@Group`](#group) pour une solution alternative.
+Les valeurs de champs peuvent être de tout type qui se conforme à `Codable`. Le stoquage de structures imbriquées et de tableaux dans des champs `@Field` est possible, mais les opérations de filtrage sont limitées. Se référer à [`@Group`](#groupes) pour une solution alternative.
 
 Pour les champs dont la valeur est facultative, utilisez `@OptionalField` à la place. 
 
@@ -159,8 +159,8 @@ Pour les champs dont la valeur est facultative, utilisez `@OptionalField` à la 
 var tag: String?
 ```
 
-!!! Attention
-    Un champ non optionnel qui possède la PropertyObserver `willSet` qui référence sa valeur actuelle, ou la PropertyObserver `didSet` qui référence `oldValue` causera une erreur fatale.
+!!! warning "Attention"
+    Un champ non-optionnel qui possède la `PropertyObserver` `willSet` qui référence sa valeur actuelle, ou la `PropertyObserver` `didSet` qui référence `oldValue` causera une erreur fatale.
 
 ## Relations
 
@@ -184,11 +184,11 @@ final class Planet: Model {
 
 `@Timestamp` peut avoir un déclencheur parmi les valeurs suivantes :
 
-|Déclencheur|Description|
-|-|-|
-|`.create`|Déclenché lors de la création de la ligne en base de données.|
-|`.update`|Déclenché lorsqu'une ligne existante en base de données est mise à jour.|
-|`.delete`|Déclenché lorsqu'une ligne existante en base de données est marquée pour suppression. Voir [suppression douce (soft delete)](#suppression-douce).|
+| Déclencheur | Description                                                                                                                                       |
+|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `.create`   | Déclenché lors de la création de la ligne en base de données.                                                                                     |
+| `.update`   | Déclenché lorsqu'une ligne existante en base de données est mise à jour.                                                                          |
+| `.delete`   | Déclenché lorsqu'une ligne existante en base de données est marquée pour suppression. Voir [suppression douce (soft delete)](#suppression-douce). |
 
 La valeur date de `@Timestamp` est optionnelle, et devrait être définie à `nil` lors de l'initialisation d'un nouveau modèle. 
 
@@ -211,11 +211,11 @@ Notez que la migration associée à cet exemple de format `.iso8601` nécessiter
 
 Voici une liste des formats timestamp disponibles :
 
-|Format|Description|Type|
-|-|-|-|
-|`.default`|Utilise un encodage `datetime` efficace et spécifique à votre driver de base de données.|Date|
-|`.iso8601`|Chaîne [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601). Accepte un paramètre `withMilliseconds`.|String|
-|`.unix`|Le nombre de secondes écoulées depuis l'Epoch Unix, avec ses décimales.|Double|
+| Format     | Description                                                                                         | Type   |
+|------------|-----------------------------------------------------------------------------------------------------|--------|
+| `.default` | Utilise un encodage `datetime` efficace et spécifique à votre driver de base de données.            | Date   |
+| `.iso8601` | Chaîne [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601). Accepte un paramètre `withMilliseconds`. | String |
+| `.unix`    | Le nombre de secondes écoulées depuis l'Epoch Unix, avec ses décimales.                             | Double |
 
 Vous pouvez accéder à la valeur brute du timestamp grâce à la propriété `timestamp`.
 
@@ -225,7 +225,7 @@ Vous pouvez accéder à la valeur brute du timestamp grâce à la propriété `t
 model.$updatedAt.timestamp = "2020-06-03T16:20:14+00:00"
 ```
 
-###  Suppression douce
+### Suppression douce
 
 L'ajout d'un `@Timestamp` utilisant le déclencheur `.delete` activera la fonctionnalité de suppression douce pour votre modèle.
 
@@ -239,7 +239,7 @@ final class Planet: Model {
 
 La suppression douce conserve les données dans votre base, mais les lignes en question ne seront plus retournées par les requêtes. 
 
-!!! Astuce
+!!! tip "Astuce"
     Vous pouvez manuellement définir un timestamp de suppression à une date future. Cela peut vous servir de mécanisme d'expiration.
 
 Pour forcer un modèle qui a la suppression douce activée a être supprimé définitivement de votre base de données, utilisez le paramètre `force` de la méthode `delete`. 
@@ -265,7 +265,7 @@ Vous pouvez également inclure les modèles marqués en suppression douce dans v
 Planet.query(on: database).withDeleted().all()
 ```
 
-## Enum
+## Énumérations
 
 `@Enum` est un type `@Field` particulier, qui permet le stoquage de valeurs textuelles en énumérations natives pour les bases de données. Les énumérations natives de bases de données vous offrent une couche supplémentaire de sécurisation au niveau du type de données et peuvent avoir de meilleures performances que des énumérations brutes.
 
@@ -288,13 +288,13 @@ Pour stoquer une énumération facultative, utilisez `@OptionalEnum`.
 
 La base de données doit être préparée en amont par une migration. Voir [enum](schema.md#énumération) pour plus d'informations à ce sujet.
 
-### Enums brutes
+### Énumérations brutes
 
-Toute énumération basée sur un type `Codable`, comme `String` ou `Int`, peut être stoquée dans un `@Field`. Sa valeur brute sera stoquée en base.
+Toute énumération basée sur un type `Codable`, comme `String` ou `Int`, peut être stoquée dans un champ marqué par `@Field`. Sa valeur brute sera stoquée en base.
 
-## Group
+## Groupes
 
-Le type `@Group` vous permet de stoquer un groupe de plusieurs champs imbriqués en tant que propriété unique dans votre modèle. À l'inverse d'une struct Codable stoquée dans un champ `@Field`, les champs présents dans un `@Group` sont requêtables. Fluent accomplit ce résultat en stoquant les champs `@Group` comme une structure plate dans votre base de données, chaque propriété correspondant à une colonne de la table ou collection du modèle dans lequel le groupe est inclus.
+Le type `@Group` vous permet de stoquer un groupe de plusieurs champs imbriqués en tant que propriété unique dans votre modèle. À l'inverse d'une struct `Codable` stoquée dans un champ `@Field`, les champs présents dans un `@Group` sont requêtables. Fluent accomplit ce résultat en stoquant les champs `@Group` comme une structure plate dans votre base de données, chaque propriété correspondant à une colonne de la table ou collection du modèle dans lequel le groupe est inclus.
 
 Pour utiliser un `@Group`, commencez par définir la structure imbriquée que vous souhaitez enregistrer, et conformez-la au protocole `Fields`. Vous remarquerez des similitudes avec le protocole `Model`, mais aucun identifiant ou nom de schéma n'est nécessaire ici. Vous pouvez stoquer ici plusieurs propriétés compatibles avec `Model`, comme `@Field`, `@Enum`, ou même d'autres `@Group`. 
 
@@ -314,7 +314,7 @@ final class Pet: Fields {
 }
 ```
 
-Quand vous avez fini de créer le définition des champs, vous pouvez l'utiliser pour définir la valeur d'une propriété `@Group`.
+Quand vous avez fini de créer la définition des champs, vous pouvez l'utiliser pour définir la valeur d'une propriété `@Group`.
 
 ```swift
 final class User: Model {
@@ -331,18 +331,18 @@ let user: User = ...
 print(user.pet.name) // String
 ```
 
-Vous pouvez inclure des champs imbriqués dans vos requêtes avec cette même syntaxe à points au niveau des PropertyWrappers.
+Vous pouvez inclure des champs imbriqués dans vos requêtes avec cette même syntaxe à points au niveau des `PropertyWrappers`.
 
 ```swift
 User.query(on: database).filter(\.$pet.$name == "Zizek").all()
 ```
 
-Dans la base de données, le `@Group` est stoqué à plat, les clés étant définies par un préfixe représentant le nom de votre groupe, et contanénées avec le nom du champ par un underscore intermédiaire (`_`). Voici un exemple de ce à quoi ressemblerait le modèle `User` dans votre base de données :
+Dans la base de données, le `@Group` est stoqué à plat, les clés étant définies par un préfixe représentant le nom de votre groupe, et concaténées avec le nom du champ par un underscore intermédiaire (`_`). Voici un exemple de ce à quoi ressemblerait le modèle `User` dans votre base de données :
 
-|id|name|pet_name|pet_type|
-|-|-|-|-|
-|1|Tanner|Zizek|Cat|
-|2|Logan|Runa|Dog|
+| id | name   | pet_name | pet_type |
+|----|--------|----------|----------|
+| 1  | Tanner | Zizek    | Cat      |
+| 2  | Logan  | Runa     | Dog      |
 
 ## Codable
 
@@ -357,16 +357,16 @@ app.get("planets") { req async throws in
 }
 ```
 
-Pendant la sérialisation vers / depuis `Codable`, les noms utilisés seront ceux des propriétés du modèle et non les clés de la base de données. Les relations seront sérialisées comme structures imbriquées, et toute donnée de relation pré-chargée sera également incluse. 
+Pendant la sérialisation vers/depuis `Codable`, les noms utilisés seront ceux des propriétés du modèle et non les clés de la base de données. Les relations seront sérialisées comme structures imbriquées, et toute donnée de relation pré-chargée sera également incluse. 
 
-!!! Info
+!!! info "Info"
     Pour la majorité des cas, nous vous recommandons d'utiliser un DTO plutôt qu'un modèle pour vos réponses d'API et corps de requêtes. Voir la section [Data Transfer Object](#data-transfer-object) pour plus de détails.
 
 ### Data Transfer Object
 
 La conformité par défaut des modèles à `Codable` peut simplifier les prototypages et cas de base. Cependant, cela a comme inconvénient d'exposer les informations internes de votre base de données à votre API. Cela n'est généralement pas souhaitable d'un point de vue sécurité - retourner des informations sensibles telles que le hash d'un mot de passe utilisateur est une mauvaise idée - mais aussi d'un point de vue praticité de maintenance et d'évolution. Cela complexifie les changements au niveau du schéma de base de données qui ne devrait pas avoir d'impact sur l'API, comme accepter ou modifier des données dans un format différent, ou bien y ajouter ou en supprimer des champs.
 
-Vous devriez utiliser un DTO (data transfer object) dans la plupart des cas, au lieu d'un modèle (aussi appelé "domain transfer object"). Un DTO est un type `Codable` différent qui représente une structure de données que vous souhaitez encoder ou décoder. Ils permettent le découplage entre votre API et votre schéma de base de données, et vous permettent de modifier vos modèles sans casser vos API publiques, de maintenir différentes versions en parallèle, et rendre vos API plus propres pour vos clients.
+Vous devriez utiliser un DTO (Data Transfer Object) dans la plupart des cas, au lieu d'un modèle (aussi appelé "Domain Transfer Object"). Un DTO est un type `Codable` différent qui représente une structure de données que vous souhaitez encoder ou décoder. Ils permettent le découplage entre votre API et votre schéma de base de données, et vous permettent de modifier vos modèles sans casser vos API publiques, de maintenir différentes versions en parallèle, et rendre vos API plus propres pour vos clients.
 
 Supposez le modèle `User` ci-dessous pour les exemples suivants :
 
@@ -470,10 +470,10 @@ planet.create(on: database)
 [earth, mars].create(on: database)
 ```
 
-!!! Avertissement
+!!! warning "Avertissement"
     Les modèles qui utilisent [`@ID(custom:)`](#identifiant-personnalisé) avec le générateur `.database` (souvent un `Int` en auto-incrément) n'auront pas leur identifiant nouvellement créé accessible juste après la création par lot. Si vous avez besoin d'accéder à cet identifiant juste après, appelez `create` sur chaque modèle.
 
-Pour une création séparée de chaque modèle du tableau, utilisez `map` + `flatten`.
+Pour une création séparée de chaque modèle du tableau, utilisez `map` combiné à `flatten`.
 
 ```swift
 [earth, mars].map { $0.create(on: database) }
@@ -502,18 +502,16 @@ planet.name = "Earth"
 try await planet.update(on: database)
 ```
 
-Pour mettre à jour un tableau de modèles, utilisez `map` + `flatten`.
+Pour mettre à jour un tableau de modèles, utilisez `map` combiné à `flatten`.
 
 ```swift
 [earth, mars].map { $0.update(on: database) }
     .flatten(on: database.eventLoop)
-
-// TODO
 ```
 
-## Query
+## Requêtes
 
-Les modèles exposent la méthode statique `query(on:)` qui retourne un QueryBuilder. 
+Les modèles exposent la méthode statique `query(on:)` qui retourne un `QueryBuilder`.
 
 ```swift
 Planet.query(on: database).all()
@@ -521,7 +519,7 @@ Planet.query(on: database).all()
 
 Vous en apprendrez d'avantage sur les requêtes dans la [section dédiée](query.md).
 
-## Find
+## Recherche par identifiant
 
 Les modèles exposent la méthode statique `find(_:on:)` pour chercher une instance de modèle par son identifiant.
 
@@ -533,17 +531,17 @@ Cette méthode retourne `nil` si aucune correspondance n'est trouvée pour cet i
 
 ## Cycle de vie
 
-Le ModelMiddleware vous permet d'écouter  les évènements du cycle de vie de votre modèle pour y exécuter votre propre logique. Les évènements suivants sont disponibles :
+Le `ModelMiddleware` vous permet d'écouter les évènements du cycle de vie de votre modèle pour y exécuter votre propre logique. Les évènements suivants sont disponibles :
 
-|Methode|Description|
-|-|-|
-|`create`|S'exécute avant la création du modèle.|
-|`update`|S'exécute avant la mise à jour du modèle.|
-|`delete(force:)`|S'exécute avant la suppression du modèle.|
-|`softDelete`|S'exécute avant le mise en suppression douce du modèle.|
-|`restore`|S'exécute avant la restauration d'un modèle en état de suppression douce.|
+| Méthode          | Description                                                               |
+|------------------|---------------------------------------------------------------------------|
+| `create`         | S'exécute avant la création du modèle.                                    |
+| `update`         | S'exécute avant la mise à jour du modèle.                                 |
+| `delete(force:)` | S'exécute avant la suppression du modèle.                                 |
+| `softDelete`     | S'exécute avant le mise en suppression douce du modèle.                   |
+| `restore`        | S'exécute avant la restauration d'un modèle en état de suppression douce. |
 
-Un ModelMiddleware se déclare en utilisant les protocoles `ModelMiddleware` ou `AsyncModelMiddleware`. Chaque méthode du cycle de vie possède une implémentation par défaut, vous n'avez donc besoin d'implémenter que celles qui vous seront réellement utiles. Chaque méthode reçoit le modèle en question, une référence vers la base de données, et la prochaine action de la chaîne. Le middleware peut choisir de faire un retour anticipé, de retourner un futur compromis, ou d'appeler l'action suivante et continuer normalement.
+Un `ModelMiddleware` se déclare en utilisant les protocoles `ModelMiddleware` ou `AsyncModelMiddleware`. Chaque méthode du cycle de vie possède une implémentation par défaut, vous n'avez donc besoin d'implémenter que celles qui vous seront réellement utiles. Chaque méthode reçoit le modèle en question, une référence vers la base de données, et la prochaine action de la chaîne. Le middleware peut choisir de faire un retour anticipé, de retourner un futur compromis, ou d'appeler l'action suivante et continuer normalement.
 
 Grâce à ces méthodes, vous pourrez exécuter des actions avant et/ou après l'évènement écouté. L'exécution d'actions à postériori peut se faire en mappant le futur retourné par le répondeur suivant de la chaîne.
 
